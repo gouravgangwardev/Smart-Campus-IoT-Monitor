@@ -2,8 +2,7 @@
 
 > A real-time IoT platform for monitoring energy consumption, room occupancy, air quality, and environmental health across a university campus — built with Node.js, MongoDB, AWS S3, Firebase, Socket.IO, and ESP32 edge devices.
 
-![Dashboard Preview](docs/screenshots/dashboard-overview.png)
-*Live dashboard showing campus-wide occupancy, CO₂ levels, and active alerts*
+
 
 ---
 
