@@ -3,12 +3,12 @@
 <br/>
 
 ```
-░█▀▀░█▄█░█▀█░█▀▄░▀█▀░░░█▀▀░█▀█░█▄█░█▀█░█░█░█▀▀
-░▀▀█░█░█░█▀█░█▀▄░░█░░░░█░░░█▀█░█░█░█▀▀░█░█░▀▀█
-░▀▀▀░▀░▀░▀░▀░▀░▀░░▀░░░░▀▀▀░▀░▀░▀░▀░▀░░░▀▀▀░▀▀▀
-░▀█▀░█▀█░▀█▀░░░█▄█░█▀█░█▀█░▀█▀░▀█▀░█▀█░█▀▄
-░░█░░█░█░░█░░░░█░█░█░█░█░█░░█░░░█░░█░█░█▀▄
-░▀▀▀░▀▀▀░░▀░░░░▀░▀░▀▀▀░▀░▀░▀▀▀░░▀░░▀▀▀░▀░▀
+
+
+
+
+
+
 ```
 
 <br/>
@@ -21,11 +21,12 @@
 <img src="https://img.shields.io/badge/ESP32-Firmware-E7352C?style=for-the-badge&logo=espressif&logoColor=white"/>
 
 <br/><br/>
+
 ---
 
 <br/>
 
-##  The Story Behind This
+## The Story Behind This
 
 I used to walk into the CS lab to find it packed, while the identical one next door sat empty. The library was freezing in January because nobody had turned off the AC after the last class. During exams, I'd trek across campus to find the seminar hall full — with no way to have known in advance.
 
@@ -39,24 +40,22 @@ No manual rounds. No guessing. No wasted electricity in empty rooms.
 
 <br/>
 
-<br/>
-
 ---
 
-## 🔍 The Problem in Numbers
+## The Problem in Numbers
 
 <br/>
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                                                                          │
-│   37%  of AC runtime occurs in rooms with zero occupancy                │
-│   28%  of lighting burns outside scheduled class hours                  │
-│   ₹2L+ average monthly electricity bill per academic block              │
-│  1200  ppm CO₂ in a packed lecture hall — Harvard says cognition drops  │
-│    0   automated alerts in place before this system                     │
-│                                                                          │
-└──────────────────────────────────────────────────────────────────────────┘
+
+                                                                          
+   37%  of AC runtime occurs in rooms with zero occupancy                
+   28%  of lighting burns outside scheduled class hours                  
+   ₹2L+ average monthly electricity bill per academic block              
+  1200  ppm CO₂ in a packed lecture hall — Harvard says cognition drops  
+    0   automated alerts in place before this system                     
+                                                                          
+
 ```
 
 > Research by Harvard's T.H. Chan School of Public Health shows cognitive function scores drop measurably above **1,000 ppm CO₂**. Most packed lecture halls hit this within an hour of starting. Nobody was measuring. Nobody was acting on it.
@@ -65,38 +64,38 @@ No manual rounds. No guessing. No wasted electricity in empty rooms.
 
 ---
 
-##  Features
+## Features
 
 <br/>
 
-###  Real-Time IoT Ingestion
+### Real-Time IoT Ingestion
 ESP32 clusters wake every 5 minutes, read all sensors, and POST to the API. In production, devices register with **AWS IoT Core** via MQTT; a Rule Action forwards messages to the ingest endpoint. Data arrives at the dashboard within **2 seconds** of leaving the sensor.
 
-###  Live Dashboard — No Refresh Needed
+### Live Dashboard — No Refresh Needed
 Socket.IO pushes updates to every connected browser the instant new data arrives. The overview page updates room cards live. Open a room's detail modal and watch the charts animate with fresh readings in real time.
 
-###  Smart Alert Engine
+### Smart Alert Engine
 A cron job runs every 2 minutes, checking every room against its configured thresholds. It raises alerts for:
--  Temperature above/below limit
--  Humidity exceeding safe levels
--  CO₂ breaching ASHRAE 1,000 ppm standard
--  Occupancy at or over room capacity
+- Temperature above/below limit
+- Humidity exceeding safe levels
+- CO₂ breaching ASHRAE 1,000 ppm standard
+- Occupancy at or over room capacity
 
 Alerts **auto-resolve** when the sensor returns to normal range — creating a complete audit trail of when each problem started and ended. A 30-minute deduplication window prevents alert storms from oscillating sensors.
 
-###  Push Notifications to Facility Staff
+### Push Notifications to Facility Staff
 Firebase Cloud Messaging delivers critical alerts directly to facility managers' phones and browsers. No polling. No email chains. Just an immediate buzz when something needs attention.
 
-###  Automated Cloud Reports
+### Automated Cloud Reports
 Every hour, an aggregation pipeline summarises energy and occupancy data per room. The results are uploaded to **AWS S3** as both JSON (for programmatic use) and CSV (for Excel). Download any historical report instantly via a **presigned URL** — no bucket credentials exposed.
 
-###  Analytics That Actually Tell You Something
+### Analytics That Actually Tell You Something
 - **Occupancy heatmap** — hourly averages across the week, so you know *when* rooms fill up
 - **Temperature trends** — 7-day rolling view per room
 - **CO₂ vs Occupancy scatter** — visual confirmation that ventilation follows people
 - **14-day energy chart** — spot which rooms are the biggest consumers
 
-###  Role-Based Access Control
+### Role-Based Access Control
 
 | Role | Can See | Can Do |
 |------|---------|--------|
@@ -104,57 +103,57 @@ Every hour, an aggregation pipeline summarises energy and occupancy data per roo
 | `facility` | All rooms & alerts | Acknowledge alerts, download reports |
 | `student` | Room occupancy only | View-only — no sensitive env data |
 
-###  Automatic Data Lifecycle Management
+### Automatic Data Lifecycle Management
 MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated reports persist forever on S3. The database never bloats; historical data is always accessible.
 
 <br/>
 
 ---
 
-##  Architecture
+## Architecture
 
 <br/>
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║  EDGE LAYER                                                                  ║
-║                                                                              ║
-║   ┌─────────────────────────────────────────────────────────────────────┐   ║
-║   │  ESP32 + DHT22 + MH-Z19B + BH1750 + PIR + PZEM-004T               │   ║
-║   │  Installed in each room  │  Wakes every 5 min  │  Deep sleep 40µA  │   ║
-║   └──────────────────────────────────┬──────────────────────────────────┘   ║
-║                                      │ HTTPS POST  (or MQTT → IoT Core)     ║
-╚══════════════════════════════════════╪══════════════════════════════════════╝
-                                       │
-╔══════════════════════════════════════╪══════════════════════════════════════╗
-║  BACKEND LAYER  (Node.js + Express)  │                                       ║
-║                                      ▼                                       ║
-║   POST /api/ingest ─────────────────────────────────────────────────────    ║
-║      │  1. Joi validation                                                    ║
-║      │  2. SensorReading.create()          ┌──────────────────────────┐     ║
-║      │  3. Room.currentState.$set()        │     MongoDB Atlas         │     ║
-║      │  4. Socket.IO broadcast  ───────────│  SensorReading (TTL 90d) │     ║
-║      └─────────────────────────────────────│  Room (live state cache)  │     ║
-║                                            │  Alert  │  User           │     ║
-║   node-cron (*/2 min)                      └──────────────────────────┘     ║
-║      └─▶ Alert Engine                                                        ║
-║             ├─▶ Alert.create()  +  Socket.IO emit                           ║
-║             └─▶ Firebase FCM  ──────────────────────▶  📱 Staff phone       ║
-║                                                                              ║
-║   node-cron (0 * * * *)                                                      ║
-║      └─▶ Report Generator                                                    ║
-║             └─▶ MongoDB Aggregation  ──▶  AWS S3  (JSON + CSV)              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-                        │ WebSocket (Socket.IO)
-╔══════════════════════╪═══════════════════════════════════════════════════════╗
-║  FRONTEND LAYER      ▼                                                       ║
-║                                                                              ║
-║   Single HTML file  │  Chart.js  │  Socket.IO client  │  JWT auth           ║
-║                                                                              ║
-║   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  ┌──────────┐   ║
-║   │ Overview │  │  Rooms   │  │  Alerts  │  │ Analytics │  │  Energy  │   ║
-║   └──────────┘  └──────────┘  └──────────┘  └───────────┘  └──────────┘   ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+
+  EDGE LAYER                                                                  
+                                                                              
+      
+     ESP32 + DHT22 + MH-Z19B + BH1750 + PIR + PZEM-004T                  
+     Installed in each room    Wakes every 5 min    Deep sleep 40µA     
+      
+                                       HTTPS POST  (or MQTT → IoT Core)     
+
+                                       
+
+  BACKEND LAYER  (Node.js + Express)                                         
+                                                                             
+   POST /api/ingest     
+        1. Joi validation                                                    
+        2. SensorReading.create()               
+        3. Room.currentState.$set()             MongoDB Atlas              
+        4. Socket.IO broadcast    SensorReading (TTL 90d)      
+        Room (live state cache)       
+                                              Alert    User                
+   node-cron (*/2 min)                           
+       Alert Engine                                                        
+              Alert.create()  +  Socket.IO emit                           
+              Firebase FCM     Staff phone       
+                                                                              
+   node-cron (0 * * * *)                                                      
+       Report Generator                                                    
+              MongoDB Aggregation    AWS S3  (JSON + CSV)              
+
+                         WebSocket (Socket.IO)
+
+  FRONTEND LAYER                                                             
+                                                                              
+   Single HTML file    Chart.js    Socket.IO client    JWT auth           
+                                                                              
+              
+    Overview     Rooms       Alerts     Analytics     Energy     
+              
+
 ```
 
 <br/>
@@ -163,26 +162,26 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ```
 [ESP32 wakes from deep sleep]
-        │
-        │  reads DHT22, MH-Z19B, BH1750, PIR, PZEM
-        │  builds JSON payload via ArduinoJson
-        │
-        ▼
-[HTTPS POST /api/ingest]  ←── X-Device-Key header authentication
-        │
-        ├── Joi validates payload (rejects bad sensor data instantly)
-        ├── SensorReading inserted into MongoDB
-        ├── Room.currentState updated (atomic $set, partial fields only)
-        └── Socket.IO emits to:
-                ├── global channel → overview page cards update
-                └── room_{id} channel → detail modal chart animates
+        
+          reads DHT22, MH-Z19B, BH1750, PIR, PZEM
+          builds JSON payload via ArduinoJson
+        
+        
+[HTTPS POST /api/ingest]  ← X-Device-Key header authentication
+        
+         Joi validates payload (rejects bad sensor data instantly)
+         SensorReading inserted into MongoDB
+         Room.currentState updated (atomic $set, partial fields only)
+         Socket.IO emits to:
+                 global channel → overview page cards update
+                 room_{id} channel → detail modal chart animates
 ```
 
 <br/>
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 <br/>
 
@@ -229,64 +228,63 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ---
 
-##  Project Structure
+## Project Structure
 
 <br/>
 
 ```
 Smart-Campus-IoT-Monitor/
-│
-├──  backend/
-│   ├──  server.js                    
-│   ├──  package.json
-│   ├──  .env.example                 
-│   │
-│   ├──  config/
-│   │   ├──  database.js              
-│   │   ├──  aws.js                   
-│   │   └──  firebase.js             
-│   │
-│   ├──  models/
-│   │   ├──  Room.js                  
-│   │   ├──  SensorReading.js        
-│   │   ├──  Alert.js                 
-│   │   └──  User.js                  
-│   │
-│   ├──  routes/
-│   │   ├──  auth.js                  
-│   │   ├──  rooms.js                 
-│   │   ├──  sensors.js              
-│   │   ├──  alerts.js               
-│   │   ├──  analytics.js            
-│   │   └──  ingest.js               
-│   │
-│   ├──  middleware/
-│   │   └──  auth.js                  
-│   │
-│   └──  utils/
-│       ├──  alertEngine.js           
-│       └──  reportGenerator.js      
-│
-├──  frontend/
-│   └──  index.html                  
-│
-├──  scripts/
-│   ├──  seedDatabase.js             
-│   └──  esp32_firmware.ino         
-│
-├──  docs/
-│   └──  PROJECT_REPORT.md          
-│
-├──  README.md
-└──  .gitignore
+
+  backend/
+     server.js
+     package.json
+     .env.example
+   
+     config/
+        database.js
+        aws.js
+        firebase.js
+   
+     models/
+        Room.js
+        SensorReading.js
+        Alert.js
+        User.js
+   
+     routes/
+        auth.js
+        rooms.js
+        sensors.js
+        alerts.js
+        analytics.js
+        ingest.js
+   
+     middleware/
+        auth.js
+   
+     utils/
+         alertEngine.js
+         reportGenerator.js
+
+  frontend/
+     index.html
+
+  scripts/
+     seedDatabase.js
+     esp32_firmware.ino
+
+  docs/
+     PROJECT_REPORT.md
+
+  README.md
+  .gitignore
 ```
 
 <br/>
 
-
 ---
 
-## 🔌 API Reference
+## API Reference
 
 <br/>
 
@@ -314,7 +312,7 @@ Authorization: Bearer <your_jwt_token>
 | `PUT` | `/api/rooms/:id` | Admin | Update room config / thresholds |
 | `DELETE` | `/api/rooms/:id` | Admin | Soft-delete room |
 
-### IoT Ingest 
+### IoT Ingest
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -337,6 +335,7 @@ Authorization: Bearer <your_jwt_token>
   "batteryPercent": 88
 }
 ```
+
 All fields except `roomId` and `deviceId` are optional — partial payloads are supported (a power-only device can POST just `powerWatts`).
 
 ### Sensors
@@ -376,8 +375,6 @@ GET /health
 
 ---
 
-
-
 ## Author
 
 <br/>
@@ -389,6 +386,7 @@ B.Tech student passionate about building systems that solve real problems — no
 <br/>
 
 ---
+
 ```
 Every sensor reading is a question answered before it was asked.
 ```
