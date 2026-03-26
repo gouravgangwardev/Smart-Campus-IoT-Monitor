@@ -39,24 +39,6 @@ No manual rounds. No guessing. No wasted electricity in empty rooms.
 
 <br/>
 
----
-
-##  Table of Contents
-
-| | Section |
-|--|---------|
-| [1](#the-problem-in-numbers) | The Problem in Numbers |
-| [2](#features) | Features |
-| [3](#architecture) | System Architecture |
-| [4](#tech-stack) | Tech Stack |
-| [5](#project-structure) | Project Structure |
-| [6](#installation) | Installation Guide |
-| [7](#iot-device-setup) | IoT Device Setup (ESP32) |
-| [8](#api-reference) | API Reference |
-| [9](#screenshots) | Screenshots |
-| [10](#future-roadmap) | Future Roadmap |
-| [11](#author) | Author |
-
 <br/>
 
 ---
