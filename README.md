@@ -21,23 +21,11 @@
 <img src="https://img.shields.io/badge/ESP32-Firmware-E7352C?style=for-the-badge&logo=espressif&logoColor=white"/>
 
 <br/><br/>
-
-> **A real-time IoT platform that watches over your campus — energy, air quality,**  
-> **occupancy, and environment — so the people inside can breathe easier and think clearer.**
-
-<br/>
-
-[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-Open_Dashboard-00d4aa?style=for-the-badge)](#usage)
-[![Report](https://img.shields.io/badge/📄_Project_Report-Read_Now-2E5DA3?style=for-the-badge)](docs/PROJECT_REPORT.md)
-[![GitHub](https://img.shields.io/badge/⭐_Star_this_repo-if_it_helped-gold?style=for-the-badge)](https://github.com/gouravgangwardev/Smart-Campus-IoT-Monitor)
-
-</div>
-
 ---
 
 <br/>
 
-## 🧭 The Story Behind This
+##  The Story Behind This
 
 I used to walk into the CS lab to find it packed, while the identical one next door sat empty. The library was freezing in January because nobody had turned off the AC after the last class. During exams, I'd trek across campus to find the seminar hall full — with no way to have known in advance.
 
@@ -53,21 +41,21 @@ No manual rounds. No guessing. No wasted electricity in empty rooms.
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 | | Section |
 |--|---------|
-| [🔍](#the-problem-in-numbers) | The Problem in Numbers |
-| [✨](#features) | Features |
-| [🏗️](#architecture) | System Architecture |
-| [🧰](#tech-stack) | Tech Stack |
-| [📁](#project-structure) | Project Structure |
-| [🚀](#installation) | Installation Guide |
-| [📡](#iot-device-setup) | IoT Device Setup (ESP32) |
-| [🔌](#api-reference) | API Reference |
-| [🖼️](#screenshots) | Screenshots |
-| [🔮](#future-roadmap) | Future Roadmap |
-| [👤](#author) | Author |
+| [1](#the-problem-in-numbers) | The Problem in Numbers |
+| [2](#features) | Features |
+| [3](#architecture) | System Architecture |
+| [4](#tech-stack) | Tech Stack |
+| [5](#project-structure) | Project Structure |
+| [6](#installation) | Installation Guide |
+| [7](#iot-device-setup) | IoT Device Setup (ESP32) |
+| [8](#api-reference) | API Reference |
+| [9](#screenshots) | Screenshots |
+| [10](#future-roadmap) | Future Roadmap |
+| [11](#author) | Author |
 
 <br/>
 
@@ -95,38 +83,38 @@ No manual rounds. No guessing. No wasted electricity in empty rooms.
 
 ---
 
-## ✨ Features
+##  Features
 
 <br/>
 
-### 📡 Real-Time IoT Ingestion
+###  Real-Time IoT Ingestion
 ESP32 clusters wake every 5 minutes, read all sensors, and POST to the API. In production, devices register with **AWS IoT Core** via MQTT; a Rule Action forwards messages to the ingest endpoint. Data arrives at the dashboard within **2 seconds** of leaving the sensor.
 
-### 📊 Live Dashboard — No Refresh Needed
+###  Live Dashboard — No Refresh Needed
 Socket.IO pushes updates to every connected browser the instant new data arrives. The overview page updates room cards live. Open a room's detail modal and watch the charts animate with fresh readings in real time.
 
-### 🚨 Smart Alert Engine
+###  Smart Alert Engine
 A cron job runs every 2 minutes, checking every room against its configured thresholds. It raises alerts for:
-- 🌡️ Temperature above/below limit
-- 💧 Humidity exceeding safe levels
-- 🌬️ CO₂ breaching ASHRAE 1,000 ppm standard
-- 👥 Occupancy at or over room capacity
+-  Temperature above/below limit
+-  Humidity exceeding safe levels
+-  CO₂ breaching ASHRAE 1,000 ppm standard
+-  Occupancy at or over room capacity
 
 Alerts **auto-resolve** when the sensor returns to normal range — creating a complete audit trail of when each problem started and ended. A 30-minute deduplication window prevents alert storms from oscillating sensors.
 
-### 🔔 Push Notifications to Facility Staff
+###  Push Notifications to Facility Staff
 Firebase Cloud Messaging delivers critical alerts directly to facility managers' phones and browsers. No polling. No email chains. Just an immediate buzz when something needs attention.
 
-### ☁️ Automated Cloud Reports
+###  Automated Cloud Reports
 Every hour, an aggregation pipeline summarises energy and occupancy data per room. The results are uploaded to **AWS S3** as both JSON (for programmatic use) and CSV (for Excel). Download any historical report instantly via a **presigned URL** — no bucket credentials exposed.
 
-### 📈 Analytics That Actually Tell You Something
+###  Analytics That Actually Tell You Something
 - **Occupancy heatmap** — hourly averages across the week, so you know *when* rooms fill up
 - **Temperature trends** — 7-day rolling view per room
 - **CO₂ vs Occupancy scatter** — visual confirmation that ventilation follows people
 - **14-day energy chart** — spot which rooms are the biggest consumers
 
-### 🔐 Role-Based Access Control
+###  Role-Based Access Control
 
 | Role | Can See | Can Do |
 |------|---------|--------|
@@ -134,14 +122,14 @@ Every hour, an aggregation pipeline summarises energy and occupancy data per roo
 | `facility` | All rooms & alerts | Acknowledge alerts, download reports |
 | `student` | Room occupancy only | View-only — no sensitive env data |
 
-### 🗄️ Automatic Data Lifecycle Management
+###  Automatic Data Lifecycle Management
 MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated reports persist forever on S3. The database never bloats; historical data is always accessible.
 
 <br/>
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 <br/>
 
@@ -212,7 +200,7 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ---
 
-## 🧰 Tech Stack
+##  Tech Stack
 
 <br/>
 
@@ -259,235 +247,60 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 <br/>
 
 ```
 Smart-Campus-IoT-Monitor/
 │
-├── 📂 backend/
-│   ├── 📄 server.js                    ← Express + Socket.IO entry point + cron jobs
-│   ├── 📄 package.json
-│   ├── 📄 .env.example                 ← Copy this to .env and fill in your keys
+├──  backend/
+│   ├──  server.js                    
+│   ├──  package.json
+│   ├──  .env.example                 
 │   │
-│   ├── 📂 config/
-│   │   ├── 📄 database.js              ← MongoDB connection with retry logic
-│   │   ├── 📄 aws.js                   ← S3 upload, presigned URLs, list reports
-│   │   └── 📄 firebase.js             ← Firebase Admin SDK + sendPushNotification()
+│   ├──  config/
+│   │   ├──  database.js              
+│   │   ├──  aws.js                   
+│   │   └──  firebase.js             
 │   │
-│   ├── 📂 models/
-│   │   ├── 📄 Room.js                  ← Campus room + live currentState subdocument
-│   │   ├── 📄 SensorReading.js        ← Time-series IoT data (TTL + compound index)
-│   │   ├── 📄 Alert.js                 ← Alert lifecycle (created → acked → resolved)
-│   │   └── 📄 User.js                  ← Auth users with role enum + FCM token
+│   ├──  models/
+│   │   ├──  Room.js                  
+│   │   ├──  SensorReading.js        
+│   │   ├──  Alert.js                 
+│   │   └──  User.js                  
 │   │
-│   ├── 📂 routes/
-│   │   ├── 📄 auth.js                  ← Login, register, /me, FCM token save
-│   │   ├── 📄 rooms.js                 ← CRUD rooms (admin-gated create/update/delete)
-│   │   ├── 📄 sensors.js              ← Latest reading + paginated history per room
-│   │   ├── 📄 alerts.js               ← List, filter, acknowledge alerts
-│   │   ├── 📄 analytics.js            ← Aggregations: heatmap, energy, overview, trends
-│   │   └── 📄 ingest.js               ← ⭐ IoT device data ingestion (core endpoint)
+│   ├──  routes/
+│   │   ├──  auth.js                  
+│   │   ├──  rooms.js                 
+│   │   ├──  sensors.js              
+│   │   ├──  alerts.js               
+│   │   ├──  analytics.js            
+│   │   └──  ingest.js               
 │   │
-│   ├── 📂 middleware/
-│   │   └── 📄 auth.js                  ← JWT verify + RBAC factory + device key auth
+│   ├──  middleware/
+│   │   └──  auth.js                  
 │   │
-│   └── 📂 utils/
-│       ├── 📄 alertEngine.js           ← Threshold checks, dedup, auto-resolve + FCM
-│       └── 📄 reportGenerator.js      ← MongoDB aggregation → JSON + CSV → S3 upload
+│   └──  utils/
+│       ├──  alertEngine.js           
+│       └──  reportGenerator.js      
 │
-├── 📂 frontend/
-│   └── 📄 index.html                  ← ⭐ Complete dashboard (zero build step)
+├──  frontend/
+│   └──  index.html                  
 │
-├── 📂 scripts/
-│   ├── 📄 seedDatabase.js             ← 7 days of realistic data, 3 users, 10 rooms
-│   └── 📄 esp32_firmware.ino         ← Complete Arduino sketch for edge device
+├──  scripts/
+│   ├──  seedDatabase.js             
+│   └──  esp32_firmware.ino         
 │
-├── 📂 docs/
-│   └── 📄 PROJECT_REPORT.md          ← Full academic report
+├──  docs/
+│   └──  PROJECT_REPORT.md          
 │
-├── 📄 README.md
-└── 📄 .gitignore
+├──  README.md
+└──  .gitignore
 ```
 
 <br/>
 
----
-
-## 🚀 Installation
-
-<br/>
-
-### What You Need First
-- **Node.js 18+** — [nodejs.org](https://nodejs.org)
-- **MongoDB** — either [locally](https://www.mongodb.com/try/download/community) or a free [Atlas cluster](https://www.mongodb.com/atlas)
-- **Git**
-
-That's it. AWS and Firebase credentials are **optional** for local development — the app runs completely without them (S3 uploads and push notifications are skipped with a console warning, everything else works normally).
-
----
-
-### Step 1 — Clone
-
-```bash
-git clone https://github.com/gouravgangwardev/Smart-Campus-IoT-Monitor.git
-cd Smart-Campus-IoT-Monitor
-```
-
----
-
-### Step 2 — Install dependencies
-
-```bash
-cd backend
-npm install
-```
-
----
-
-### Step 3 — Configure environment
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` in any editor and set **at minimum** these four values:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/smart_campus_iot
-JWT_SECRET=pick_any_long_random_string_here_minimum_32_chars
-DEVICE_INGEST_KEY=pick_any_key_your_iot_devices_will_use
-```
-
-<details>
-<summary>☁️ Optional: Add AWS + Firebase for full cloud features</summary>
-
-```env
-# AWS S3 — for hourly report uploads
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_REGION=ap-south-1
-S3_BUCKET_NAME=smart-campus-reports
-
-# Firebase — for push notifications
-# Paste your entire service account JSON as a single-line string
-FIREBASE_SERVICE_ACCOUNT_JSON={"type":"service_account","project_id":"..."}
-```
-
-</details>
-
----
-
-### Step 4 — Seed the database
-
-This creates 3 demo users, 10 realistic campus rooms, and **20,160 sensor readings** spread across the past 7 days with proper diurnal patterns (morning/afternoon occupancy peaks, CO₂ rising with occupancy, etc.).
-
-```bash
-cd ../scripts
-node seedDatabase.js
-```
-
-You'll see:
-
-```
-[Seed] Connected to MongoDB
-[Seed] Created 3 users
-[Seed] Created 10 rooms
-[Seed] Readings inserted: 20160/20160
-[Seed] Created 5 alerts
-
-╔══════════════════════════════════════════════════════╗
-║           SEED COMPLETE — Login Credentials           ║
-╠══════════════════════════════════════════════════════╣
-║  Admin    → admin@campus.edu    / password123         ║
-║  Facility → facility@campus.edu / password123         ║
-║  Student  → student@campus.edu  / password123         ║
-╚══════════════════════════════════════════════════════╝
-```
-
----
-
-### Step 5 — Start the server
-
-```bash
-cd ../backend
-npm run dev
-```
-
-```
-🚀 Smart Campus API running on port 5000
-   Environment : development
-   WebSocket   : enabled
-   Cron jobs   : active
-```
-
----
-
-### Step 6 — Open the dashboard
-
-Open `frontend/index.html` directly in your browser.
-
-> **No build step. No npm install for the frontend. Just open the file.**
-
-Login with `admin@campus.edu` / `password123` and you'll see a fully populated live dashboard.
-
-<br/>
-
----
-
-## 📡 IoT Device Setup
-
-<br/>
-
-### Hardware Wiring
-
-```
-ESP32 DevKit v1
-│
-├── GPIO 4   ──── DHT22 data pin (Temperature + Humidity)
-│
-├── GPIO 16  ──── MH-Z19B RX  (CO₂ sensor — UART2)
-├── GPIO 17  ──── MH-Z19B TX
-│
-├── GPIO 21  ──── BH1750 SDA  (Light sensor — I²C)
-├── GPIO 22  ──── BH1750 SCL
-│
-├── GPIO 13  ──── PIR HC-SR501 OUT (Presence detection)
-│
-├── GPIO 18  ──── PZEM-004T RX (Power monitor — UART1)
-└── GPIO 19  ──── PZEM-004T TX
-```
-
-### Arduino Libraries to Install
-
-Open Arduino IDE → Tools → Manage Libraries → search and install:
-
-| Library | Author |
-|---------|--------|
-| `DHT sensor library` | Adafruit |
-| `MH-Z19` | Jonathan Dempsey |
-| `BH1750` | Christopher Laws |
-| `ArduinoJson` | Benoit Blanchon |
-
-### Flash the Firmware
-
-1. Open `scripts/esp32_firmware.ino` in Arduino IDE
-2. Update these four values at the top of the file:
-```cpp
-const char* WIFI_SSID   = "YourCampusWiFi";
-const char* WIFI_PASS   = "wifi_password";
-const char* SERVER_URL  = "https://your-api-domain.com/api/ingest";
-const char* DEVICE_KEY  = "your_device_ingest_key";   // matches DEVICE_INGEST_KEY in .env
-const char* ROOM_ID     = "64abc...";                  // MongoDB ObjectId of this room
-```
-3. Select your board: **Tools → Board → ESP32 Dev Module**
-4. Select your port and click **Upload**
-
-The device will wake every 5 minutes, read all sensors, POST to the API, and go back to deep sleep. Average current draw: **under 10 mA** on a 5-minute cycle.
-
-<br/>
 
 ---
 
@@ -519,7 +332,7 @@ Authorization: Bearer <your_jwt_token>
 | `PUT` | `/api/rooms/:id` | Admin | Update room config / thresholds |
 | `DELETE` | `/api/rooms/:id` | Admin | Soft-delete room |
 
-### IoT Ingest ⭐
+### IoT Ingest 
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -581,151 +394,19 @@ GET /health
 
 ---
 
-## 🖼️ Screenshots
 
-<br/>
 
-> Screenshots show the live dashboard running with seeded data. All charts, cards, and alerts are real — not mocks.
-
-### Overview Dashboard
-Live campus-wide stats: total occupancy %, average temperature, active alert count, and per-room occupancy + CO₂ bar charts that update in real time as sensor data arrives.
-
-```
-📸 docs/screenshots/dashboard-overview.png
-```
-
-### Rooms Grid
-All campus rooms in one view. Each card shows live temperature, CO₂, and power readings with colour-coded indicators (green = healthy, amber = warning, red = critical). The occupancy bar fills proportionally to capacity.
-
-```
-📸 docs/screenshots/rooms-grid.png
-```
-
-### Room Detail Modal
-Click any room to open a drill-down modal with 6 live metrics and a dual-axis chart showing the past 24 hours of temperature and CO₂ together — so you can see exactly when they peaked and whether they tracked together.
-
-```
-📸 docs/screenshots/room-detail.png
-```
-
-### Alerts Page
-Full alert feed with severity badges, room names, timestamps, and one-click acknowledgement. Facility managers see a "Acknowledge" button; students see read-only view.
-
-```
-📸 docs/screenshots/alerts.png
-```
-
-### Analytics + Energy
-Hourly occupancy heatmap across the week (see when rooms are busiest), a 7-day temperature trend line, an occupancy-vs-CO₂ scatter plot, and a 14-day energy bar chart with per-room breakdown.
-
-```
-📸 docs/screenshots/analytics.png
-```
-
-<br/>
-
----
-
-## 🔮 Future Roadmap
-
-<br/>
-
-These are the features deliberately left out of v1.0 — not because they weren't worth building, but because shipping a complete, working, well-documented core beats shipping an impressive-but-half-finished everything.
-
-```
-v1.1 — HVAC Automation
-       └─ Add actuator commands to the ingest response payload
-          If CO₂ > 1000 ppm and room is occupied:
-          respond with { "command": "set_ac_mode", "value": "fresh_air" }
-          ESP32 firmware checks response and toggles relay accordingly
-
-v1.2 — Predictive Occupancy
-       └─ Train a simple time-series model (Prophet or LSTM) on 30+ days of readings
-          to forecast room availability 1–2 hours ahead
-          Expose a student-facing endpoint: GET /api/predict/:roomId
-
-v1.3 — ML Anomaly Detection
-       └─ Isolation Forest on rolling sensor windows
-          Detect unusual power spikes (equipment fault?)
-          or CO₂ patterns that don't match occupancy (sensor drift?)
-
-v2.0 — AWS Timestream Migration
-       └─ Replace MongoDB SensorReading collection with Timestream
-          for unlimited retention, faster range queries, and native
-          time-series aggregations without custom aggregation pipelines
-
-v2.1 — Multi-Campus Support
-       └─ Namespace all data by campus ID
-          Campus admin sees only their buildings
-          Super admin sees cross-campus comparison dashboard
-
-v2.2 — Energy Bill Estimation
-       └─ Integrate electricity tariff rates (₹/kWh, time-of-use pricing)
-          Convert kWh to actual cost per room per month
-          Generate monthly bill breakdown reports
-```
-
-<br/>
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome — especially improvements to:
-- The ESP32 firmware (better sensor fusion, MQTT direct instead of REST)
-- The analytics queries (performance improvements, new chart types)
-- The alert engine (smarter thresholds, hysteresis logic)
-
-```bash
-# Fork the repo, then:
-git checkout -b feature/your-feature-name
-git commit -m "feat: describe what you added"
-git push origin feature/your-feature-name
-# Open a Pull Request
-```
-
-<br/>
-
----
-
-## 👤 Author
+## Author
 
 <br/>
 
 **Gourav Gangwar**
 
-B.Tech / MCA student passionate about building systems that solve real problems — not just demonstrate concepts.
-
-[![GitHub](https://img.shields.io/badge/GitHub-gouravgangwardev-181717?style=for-the-badge&logo=github)](https://github.com/gouravgangwardev)
+B.Tech student passionate about building systems that solve real problems — not just demonstrate concepts.
 
 <br/>
 
 ---
-
-## 📄 License
-
-MIT License — free for academic, educational, and personal use.
-
-```
-Copyright (c) 2025 Gourav Gangwar
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software to use, copy, modify, merge, publish, distribute, and/or sell
-copies of it, subject to the standard MIT terms.
-```
-
-<br/>
-
----
-
-<div align="center">
-
-**If this project helped you, saved you time, or gave you ideas — leave a ⭐**
-
-*Built with genuine frustration at cold empty libraries and hot packed labs.*
-
-<br/>
-
 ```
 Every sensor reading is a question answered before it was asked.
 ```
