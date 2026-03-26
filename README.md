@@ -161,20 +161,8 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 ### Data Flow — What Happens in 2 Seconds
 
 ```
-[ESP32 wakes from deep sleep]
-        │
-        │  reads DHT22, MH-Z19B, BH1750, PIR, PZEM
-        │  builds JSON payload via ArduinoJson
-        │
-        ▼
-[HTTPS POST /api/ingest]  ←── X-Device-Key header authentication
-        │
-        ├── Joi validates payload (rejects bad sensor data instantly)
-        ├── SensorReading inserted into MongoDB
-        ├── Room.currentState updated (atomic $set, partial fields only)
-        └── Socket.IO emits to:
-                ├── global channel → overview page cards update
-                └── room_{id} channel → detail modal chart animates
+<img width="676" height="996" alt="image" src="https://github.com/user-attachments/assets/fc790b61-6af4-4d87-aed9-75da16b9717c" />
+
 ```
 
 <br/>
@@ -233,51 +221,8 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 <br/>
 
 ```
-Smart-Campus-IoT-Monitor/
-│
-├── backend/
-│   ├── server.js
-│   ├── package.json
-│   ├── .env.example
-│   │
-│   ├── config/
-│   │   ├── database.js
-│   │   ├── aws.js
-│   │   └── firebase.js
-│   │
-│   ├── models/
-│   │   ├── Room.js
-│   │   ├── SensorReading.js
-│   │   ├── Alert.js
-│   │   └── User.js
-│   │
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── rooms.js
-│   │   ├── sensors.js
-│   │   ├── alerts.js
-│   │   ├── analytics.js
-│   │   └── ingest.js
-│   │
-│   ├── middleware/
-│   │   └── auth.js
-│   │
-│   └── utils/
-│       ├── alertEngine.js
-│       └── reportGenerator.js
-│
-├── frontend/
-│   └── index.html
-│
-├── scripts/
-│   ├── seedDatabase.js
-│   └── esp32_firmware.ino
-│
-├── docs/
-│   └── PROJECT_REPORT.md
-│
-├── README.md
-└── .gitignore
+<img width="472" height="976" alt="image" src="https://github.com/user-attachments/assets/b4d6e0c4-b580-44b2-b690-7afa349becb3" />
+
 ```
 
 <br/>
