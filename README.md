@@ -160,10 +160,9 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ### Data Flow — What Happens in 2 Seconds
 
-```
+
 <img width="676" height="996" alt="image" src="https://github.com/user-attachments/assets/fc790b61-6af4-4d87-aed9-75da16b9717c" />
 
-```
 
 <br/>
 
@@ -220,10 +219,10 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 <br/>
 
-```
+
 <img width="472" height="976" alt="image" src="https://github.com/user-attachments/assets/b4d6e0c4-b580-44b2-b690-7afa349becb3" />
 
-```
+
 
 <br/>
 
