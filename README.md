@@ -3,12 +3,12 @@
 <br/>
 
 ```
-
-
-
-
-
-
+░█▀▀░█▄█░█▀█░█▀▄░▀█▀░░░█▀▀░█▀█░█▄█░█▀█░█░█░█▀▀
+░▀▀█░█░█░█▀█░█▀▄░░█░░░░█░░░█▀█░█░█░█▀▀░█░█░▀▀█
+░▀▀▀░▀░▀░▀░▀░▀░▀░░▀░░░░▀▀▀░▀░▀░▀░▀░▀░░░▀▀▀░▀▀▀
+░▀█▀░█▀█░▀█▀░░░█▄█░█▀█░█▀█░▀█▀░▀█▀░█▀█░█▀▄
+░░█░░█░█░░█░░░░█░█░█░█░█░█░░█░░░█░░█░█░█▀▄
+░▀▀▀░▀▀▀░░▀░░░░▀░▀░▀▀▀░▀░▀░▀▀▀░░▀░░▀▀▀░▀░▀
 ```
 
 <br/>
@@ -47,15 +47,15 @@ No manual rounds. No guessing. No wasted electricity in empty rooms.
 <br/>
 
 ```
-
-                                                                          
-   37%  of AC runtime occurs in rooms with zero occupancy                
-   28%  of lighting burns outside scheduled class hours                  
-   ₹2L+ average monthly electricity bill per academic block              
-  1200  ppm CO₂ in a packed lecture hall — Harvard says cognition drops  
-    0   automated alerts in place before this system                     
-                                                                          
-
+┌──────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│   37%  of AC runtime occurs in rooms with zero occupancy                │
+│   28%  of lighting burns outside scheduled class hours                  │
+│   ₹2L+ average monthly electricity bill per academic block              │
+│  1200  ppm CO₂ in a packed lecture hall — Harvard says cognition drops  │
+│    0   automated alerts in place before this system                     │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 > Research by Harvard's T.H. Chan School of Public Health shows cognitive function scores drop measurably above **1,000 ppm CO₂**. Most packed lecture halls hit this within an hour of starting. Nobody was measuring. Nobody was acting on it.
@@ -115,45 +115,45 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 <br/>
 
 ```
-
-  EDGE LAYER                                                                  
-                                                                              
-      
-     ESP32 + DHT22 + MH-Z19B + BH1750 + PIR + PZEM-004T                  
-     Installed in each room    Wakes every 5 min    Deep sleep 40µA     
-      
-                                       HTTPS POST  (or MQTT → IoT Core)     
-
-                                       
-
-  BACKEND LAYER  (Node.js + Express)                                         
-                                                                             
-   POST /api/ingest     
-        1. Joi validation                                                    
-        2. SensorReading.create()               
-        3. Room.currentState.$set()             MongoDB Atlas              
-        4. Socket.IO broadcast    SensorReading (TTL 90d)      
-        Room (live state cache)       
-                                              Alert    User                
-   node-cron (*/2 min)                           
-       Alert Engine                                                        
-              Alert.create()  +  Socket.IO emit                           
-              Firebase FCM     Staff phone       
-                                                                              
-   node-cron (0 * * * *)                                                      
-       Report Generator                                                    
-              MongoDB Aggregation    AWS S3  (JSON + CSV)              
-
-                         WebSocket (Socket.IO)
-
-  FRONTEND LAYER                                                             
-                                                                              
-   Single HTML file    Chart.js    Socket.IO client    JWT auth           
-                                                                              
-              
-    Overview     Rooms       Alerts     Analytics     Energy     
-              
-
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  EDGE LAYER                                                                  ║
+║                                                                              ║
+║   ┌─────────────────────────────────────────────────────────────────────┐   ║
+║   │  ESP32 + DHT22 + MH-Z19B + BH1750 + PIR + PZEM-004T               │   ║
+║   │  Installed in each room  │  Wakes every 5 min  │  Deep sleep 40µA  │   ║
+║   └──────────────────────────────────┬──────────────────────────────────┘   ║
+║                                      │ HTTPS POST  (or MQTT → IoT Core)     ║
+╚══════════════════════════════════════╪══════════════════════════════════════╝
+                                       │
+╔══════════════════════════════════════╪══════════════════════════════════════╗
+║  BACKEND LAYER  (Node.js + Express)  │                                       ║
+║                                      ▼                                       ║
+║   POST /api/ingest ─────────────────────────────────────────────────────    ║
+║      │  1. Joi validation                                                    ║
+║      │  2. SensorReading.create()          ┌──────────────────────────┐     ║
+║      │  3. Room.currentState.$set()        │     MongoDB Atlas         │     ║
+║      │  4. Socket.IO broadcast  ───────────│  SensorReading (TTL 90d) │     ║
+║      └─────────────────────────────────────│  Room (live state cache)  │     ║
+║                                            │  Alert  │  User           │     ║
+║   node-cron (*/2 min)                      └──────────────────────────┘     ║
+║      └─▶ Alert Engine                                                        ║
+║             ├─▶ Alert.create()  +  Socket.IO emit                           ║
+║             └─▶ Firebase FCM  ──────────────────────▶  Staff phone          ║
+║                                                                              ║
+║   node-cron (0 * * * *)                                                      ║
+║      └─▶ Report Generator                                                    ║
+║             └─▶ MongoDB Aggregation  ──▶  AWS S3  (JSON + CSV)              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+                        │ WebSocket (Socket.IO)
+╔══════════════════════╪═══════════════════════════════════════════════════════╗
+║  FRONTEND LAYER      ▼                                                       ║
+║                                                                              ║
+║   Single HTML file  │  Chart.js  │  Socket.IO client  │  JWT auth           ║
+║                                                                              ║
+║   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  ┌──────────┐   ║
+║   │ Overview │  │  Rooms   │  │  Alerts  │  │ Analytics │  │  Energy  │   ║
+║   └──────────┘  └──────────┘  └──────────┘  └───────────┘  └──────────┘   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
 <br/>
@@ -162,19 +162,19 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ```
 [ESP32 wakes from deep sleep]
-        
-          reads DHT22, MH-Z19B, BH1750, PIR, PZEM
-          builds JSON payload via ArduinoJson
-        
-        
-[HTTPS POST /api/ingest]  ← X-Device-Key header authentication
-        
-         Joi validates payload (rejects bad sensor data instantly)
-         SensorReading inserted into MongoDB
-         Room.currentState updated (atomic $set, partial fields only)
-         Socket.IO emits to:
-                 global channel → overview page cards update
-                 room_{id} channel → detail modal chart animates
+        │
+        │  reads DHT22, MH-Z19B, BH1750, PIR, PZEM
+        │  builds JSON payload via ArduinoJson
+        │
+        ▼
+[HTTPS POST /api/ingest]  ←── X-Device-Key header authentication
+        │
+        ├── Joi validates payload (rejects bad sensor data instantly)
+        ├── SensorReading inserted into MongoDB
+        ├── Room.currentState updated (atomic $set, partial fields only)
+        └── Socket.IO emits to:
+                ├── global channel → overview page cards update
+                └── room_{id} channel → detail modal chart animates
 ```
 
 <br/>
@@ -234,50 +234,50 @@ MongoDB TTL index auto-deletes raw sensor readings after **90 days**. Aggregated
 
 ```
 Smart-Campus-IoT-Monitor/
-
-  backend/
-     server.js
-     package.json
-     .env.example
-   
-     config/
-        database.js
-        aws.js
-        firebase.js
-   
-     models/
-        Room.js
-        SensorReading.js
-        Alert.js
-        User.js
-   
-     routes/
-        auth.js
-        rooms.js
-        sensors.js
-        alerts.js
-        analytics.js
-        ingest.js
-   
-     middleware/
-        auth.js
-   
-     utils/
-         alertEngine.js
-         reportGenerator.js
-
-  frontend/
-     index.html
-
-  scripts/
-     seedDatabase.js
-     esp32_firmware.ino
-
-  docs/
-     PROJECT_REPORT.md
-
-  README.md
-  .gitignore
+│
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   ├── .env.example
+│   │
+│   ├── config/
+│   │   ├── database.js
+│   │   ├── aws.js
+│   │   └── firebase.js
+│   │
+│   ├── models/
+│   │   ├── Room.js
+│   │   ├── SensorReading.js
+│   │   ├── Alert.js
+│   │   └── User.js
+│   │
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── rooms.js
+│   │   ├── sensors.js
+│   │   ├── alerts.js
+│   │   ├── analytics.js
+│   │   └── ingest.js
+│   │
+│   ├── middleware/
+│   │   └── auth.js
+│   │
+│   └── utils/
+│       ├── alertEngine.js
+│       └── reportGenerator.js
+│
+├── frontend/
+│   └── index.html
+│
+├── scripts/
+│   ├── seedDatabase.js
+│   └── esp32_firmware.ino
+│
+├── docs/
+│   └── PROJECT_REPORT.md
+│
+├── README.md
+└── .gitignore
 ```
 
 <br/>
